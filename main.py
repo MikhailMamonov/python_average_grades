@@ -5,10 +5,11 @@ from module import Student
 from tabulate import tabulate
 
 def parse_args(args):
+
     parser = argparse.ArgumentParser(description="Пример использования argparse")
     parser.add_argument("--files", nargs="*", help="Список файлов для обработки")
     parser.add_argument("--report", help="Отчет")
-    return parser.parse_args(sys.argv[1:])
+    return parser.parse_args(args[1:])
 
 def get_rows(files):
     rows = []
@@ -31,13 +32,19 @@ def get_students(rows):
     
 def write_to_csv(filename,rows):
     studentGradePairs = {}
-    field = ["student_name", "grade"]
+    field = [" ","student_name", "grade"]
 
     for key in rows:
         studentGradePairs[key] = rows[key].calculate_average()
     sortedStudentGradePairs = dict(sorted(studentGradePairs.items(), key=lambda item: item[1], reverse=True))
     
-    print(tabulate([(k, v) for k, v in sortedStudentGradePairs.items()], tablefmt="grid", headers=field))
+    table = []
+    counter = 0
+    for  k, v in sortedStudentGradePairs.items():
+        counter+=1
+        table.append((counter,k, v))
+
+    print(tabulate(table, tablefmt="grid", headers=field))
     with open(f'{filename}.csv', 'w', encoding='utf-8', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(field)
@@ -47,6 +54,7 @@ def write_to_csv(filename,rows):
 def main():
     
     args = parse_args(sys.argv)
+    print(args)
     rows = get_rows(args.files)
     students = get_students(rows)
     write_to_csv(args.report,students)

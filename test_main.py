@@ -85,5 +85,20 @@ def test_parseArgs_Success():
     assert len(parsed_args.files) ==2
     assert parsed_args.report == 'student-performance'
 
+def test_parseArgs_fail_argumentError():
+    args = ['main.py', '--files', 'students1.csv', 'students2.csv', '--report']
+    with pytest.raises(Exception):
+        parsed_args = parse_args(args)
+
+def test_write_to_csv_Success():
+    rows = {'Белов Станислав': Student('Белов Станислав', [5,4]),
+             'Морозов Петр': Student('Морозов Петр', [3, 4])}
+    filename = 'student_performance'
+    expected_count = sum(1 for line in rows)+1
+
+    write_to_csv(filename,rows)
+    with open(f'{filename}.csv') as f:
+        file_line_count=sum(1 for line in f)
+        assert file_line_count == expected_count
 
 

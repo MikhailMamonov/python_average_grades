@@ -5,7 +5,8 @@ from module import Student
 from tabulate import tabulate
 
 def parse_args(args):
-
+    if args[-1] == '--report' or args[1] == '--report' :
+        raise Exception
     parser = argparse.ArgumentParser(description="Пример использования argparse")
     parser.add_argument("--files", nargs="*", help="Список файлов для обработки")
     parser.add_argument("--report", help="Отчет")
@@ -31,6 +32,7 @@ def get_students(rows):
     return studentsDict
     
 def write_to_csv(filename,rows):
+    print(rows)
     studentGradePairs = {}
     field = [" ","student_name", "grade"]
 
@@ -45,6 +47,7 @@ def write_to_csv(filename,rows):
         table.append((counter,k, v))
 
     print(tabulate(table, tablefmt="grid", headers=field))
+    
     with open(f'{filename}.csv', 'w', encoding='utf-8', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(field)
@@ -54,7 +57,6 @@ def write_to_csv(filename,rows):
 def main():
     
     args = parse_args(sys.argv)
-    print(args)
     rows = get_rows(args.files)
     students = get_students(rows)
     write_to_csv(args.report,students)

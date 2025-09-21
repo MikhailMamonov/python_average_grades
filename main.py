@@ -36,7 +36,7 @@ def write_to_csv(filename,rows):
     field = [" ","student_name", "grade"]
 
     for key in rows:
-        studentGradePairs[key] = rows[key].calculate_average()
+        studentGradePairs[key] = round(rows[key].calculate_average(),1)
     sortedStudentGradePairs = dict(sorted(studentGradePairs.items(), key=lambda item: item[1], reverse=True))
     
     table = []

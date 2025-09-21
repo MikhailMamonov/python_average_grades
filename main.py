@@ -32,7 +32,6 @@ def get_students(rows):
     return studentsDict
     
 def write_to_csv(filename,rows):
-    print(rows)
     studentGradePairs = {}
     field = [" ","student_name", "grade"]
 
@@ -47,7 +46,7 @@ def write_to_csv(filename,rows):
         table.append((counter,k, v))
 
     print(tabulate(table, tablefmt="grid", headers=field))
-    
+
     with open(f'{filename}.csv', 'w', encoding='utf-8', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(field)
